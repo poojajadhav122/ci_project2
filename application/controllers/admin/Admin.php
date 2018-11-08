@@ -12,13 +12,17 @@ class Admin extends CI_Controller {
 	public function login()
 	{
 		//echo "login";
+		if($this->session->userdata($status))
+		{
+			redirect(base_url().'index.php/admin/admin');
+		}
 		$this->load->view('admin/login');
 	}
 	public function logout()
 	{
 		$this->session->unset_userdata('status');
 		$this->session->session_destroy();
-		redirect(base_url());
+		redirect(base_url().'index.php/admin/admin/login');
 	}
 	public function register()
 	{
@@ -28,13 +32,15 @@ class Admin extends CI_Controller {
 	function register_action()
 	{
 		echo "<pre>";
-			print_r($_POST);
-				echo "</pre>";
+		print_r($_POST);
+		echo "</pre>";
 
 		echo "<pre>";
-			print_r($_FILES);
-				echo "</pre>";
-				$this->form_validation->set_rules('uname', 'Username', 'required|trim|min_length[2]|max_length[12]|alpha|is_unique[users.uname]');
+		print_r($_FILES);
+		echo "</pre>";
+
+
+	$this->form_validation->set_rules('uname', 'Username', 'required|trim|min_length[2]|max_length[12]|alpha|is_unique[users.uname]');
 		
 	$this->form_validation->set_rules('umobile', 'Mobile Number:', 'required|trim|exact_length[10]|integer');
 	$this->form_validation->set_rules('uemail', 'Email Id:', 'trim|required|valid_email|is_unique[users.uemail]');
@@ -74,15 +80,37 @@ class Admin extends CI_Controller {
                       echo "file upload successfully";
 
                 }
-				}
+		}
 
 
 	}
 	function login_action()
 	{
-		echo "<pre>";
-			print_r($_POST);
-				echo "</pre>";
+		// echo "<pre>";
+		// 	print_r($_POST);
+		// 		echo "</pre>";
+
+		$this->form_validation->set_rules('uemail','EmailID:','trim|required|valid_email');
+		$this->form_validation->set_rules('upass','Password:','trim|required|alpha_dash|min_length[4]|max_length[12]');
+
+
+				if($this->form_validation->run() == FALSE){
+					echo validation_errors();
+				}
+				else{
+					$this->load->model('admin_model');
+					$auth_ans = $this->admin_model->auth($_POST['uemail'],
+				       do_hash($_POST['upass']));
+					if($auth_ans){
+						//echo "ok";
+						$this->session->set_userdata('status',true);
+						echo "done";
+
+					}
+					else{
+						echo "invalid emailid or password";
+					}
+				}
 	}
 }
 ?>
