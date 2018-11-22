@@ -63,6 +63,12 @@
             <span>Login</span></a>
         </li>
 
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('index.php/admin/admin/forgot_password')?>">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Forgot password</span></a>
+        </li>
+
 
 
         <?php
@@ -72,10 +78,21 @@ endif;
         if($this->session->userdata('status')):
         ?>
   <li class="nav-item">
-          <a class="nav-link" href="<?php echo base_url('index.php/admin/admin/change_pass')?>">
+          <a class="nav-link" href="<?php echo base_url('index.php/admin/admin/password')?>">
             <i class="fas fa-fw fa-chart-area"></i>
             <span>Change Password</span></a>
         </li>
+        <?php
+         if($this->session->userdata('userstatus')==2):
+        ?>
+         <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('index.php/admin/admin/library')?>">
+            <i class="fas fa-fw fa-chart-area"></i>
+            <span>Add Library</span></a>
+        </li>
+         <?php
+endif;
+?>
         <li class="nav-item">
           <a class="nav-link" href="<?php echo base_url('index.php/admin/admin/logout')?>">
             <i class="fas fa-fw fa-table"></i>
